@@ -7,7 +7,7 @@ var postDoc;
 var postData;
 var stackData = {};
 
-var getPostDocWithUID = function(uid='ziweia', page=0, callback) {
+var getPostDocWithUID = function(uid, page=0, callback) {
     var limit=22;
 	var url = `${HOST}/v2/blog/${uid}/posts?api_key=${API_KEY}&${POST_PAR}&offset=${limit*page}&limit=${limit}`;
 	console.log("url="+url);
@@ -131,7 +131,7 @@ function play(url) {
 }
 
 function showpics(uid, index) {
-    console.log("showpics: " + index);
+    console.log("showpics: " + index + ", uid: "+uid);
     var text = `<?xml version="1.0" encoding="UTF-8" ?>
 		<document>
 		   <head>
@@ -234,7 +234,7 @@ var addDecodeFunc = function(){
 
 addDecodeFunc.call(String.prototype);
 function showtext(uid, index) {
-    console.log("show text: "+index);
+    console.log("show text: "+index+" ,uid: "+uid);
     postData = stackData[uid];
     var content = `${postData['response']['posts'][index]['body']}`;
 	
