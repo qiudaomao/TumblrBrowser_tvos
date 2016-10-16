@@ -5,6 +5,7 @@ const POST_PAR='reblog_info=True';//&type=video';
 
 var postDoc;
 var postData;
+var stackData = {};
 
 var getPostDocWithUID = function(uid='ziweia', page=0, callback) {
     var limit=22;
@@ -14,6 +15,7 @@ var getPostDocWithUID = function(uid='ziweia', page=0, callback) {
 		//console.log("content: "+content);
 		let data = JSON.parse(content);
         postData = data;
+        stackData[uid]=data;
 		var text = `<?xml version="1.0" encoding="UTF-8" ?>
 		<document>
 		   <stackTemplate>
@@ -72,7 +74,7 @@ var getPostDocWithUID = function(uid='ziweia', page=0, callback) {
 					</lockup>`;
             } else if (item['type']=='text') {
                 text += `
-					<lockup onselect="showtext('${index-1}')" onholdselect="showPost('${item['reblogged_from_name']}')">
+					<lockup onselect="showtext('${uid}','${index-1}')" onholdselect="showPost('${item['reblogged_from_name']}')">
 					   <img src="https://api.tumblr.com/v2/blog/${uid}.tumblr.com/avatar/512" width="250" height="376" />`;
                 if (item['reblogged_from_title']) {
                     text += `
@@ -128,7 +130,7 @@ function play(url) {
     myPlayer.play();
 }
 
-function showpics(index) {
+function showpics(uid, index) {
     console.log("showpics: " + index);
     var text = `<?xml version="1.0" encoding="UTF-8" ?>
 		<document>
@@ -141,6 +143,7 @@ function showpics(index) {
 		   </head>
 		   <oneupTemplate mode="oneup caption">
 			  <section>`;
+    postData = stackData[uid];
     var photos = postData['response']['posts'][index]['photos'];
     for (var item in photos) {
         text += `
@@ -230,8 +233,9 @@ var addDecodeFunc = function(){
 }
 
 addDecodeFunc.call(String.prototype);
-function showtext(index) {
+function showtext(uid, index) {
     console.log("show text: "+index);
+    postData = stackData[uid];
     var content = `${postData['response']['posts'][index]['body']}`;
 	
     var clean_content = content.replace(/<[^>]+>/g, "");
