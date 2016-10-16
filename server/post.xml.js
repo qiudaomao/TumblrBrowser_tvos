@@ -54,7 +54,7 @@ var getPostDocWithUID = function(uid, page=0, callback) {
 					</lockup>`;
             } else if (item['type']=='photo') {
                 text += `
-					<lockup onselect="showpics('${index-1}')" onholdselect="showPost('${item['reblogged_from_name']}')">
+					<lockup onselect="showpics('${uid}','${index-1}')" onholdselect="showPost('${item['reblogged_from_name']}')">
 					   <img src="${item['photos'][0]['alt_sizes'][0]['url']}" width="250" height="376" />`;
                 if (item['reblogged_from_title']) {
                     text += `
